@@ -1,0 +1,87 @@
+{
+  "students": [
+    {
+      "studentName": "Mariem",
+      "studentAge": "21",
+      "GroupId": "11",
+      "id": 6
+    },
+    {
+      "studentName": "St 1",
+      "studentAge": "21",
+      "GroupId": "11",
+      "id": 7
+    },
+    {
+      "GroupId": "",
+      "studentName": "St 2",
+      "studentAge": "22",
+      "id": 8
+    },
+    {
+      "GroupId": "",
+      "studentName": "St 3",
+      "studentAge": "21",
+      "id": 9
+    },
+    {
+      "GroupId": "",
+      "studentName": "St 4",
+      "studentAge": "22",
+      "id": 10
+    },
+    {
+      "GroupId": "",
+      "studentName": "x",
+      "studentAge": "20",
+      "id": 11
+    }
+  ],
+  "professors": [
+    {
+      "GroupId": "",
+      "professorName": "Naoufel",
+      "professorAge": "41",
+      "id": 10
+    },
+    {
+      "GroupId": "",
+      "professorName": "Abd Rahmen\t",
+      "professorAge": "35",
+      "id": 12
+    },
+    {
+      "GroupId": "",
+      "professorName": "Mohamed Ali",
+      "professorAge": "32",
+      "id": 13
+    },
+    {
+      "GroupId": "",
+      "professorName": "Awfa",
+      "professorAge": "30",
+      "id": 16
+    },
+    {
+      "GroupId": "",
+      "professorName": "Prof 1",
+      "professorAge": "29",
+      "id": 17
+    },
+    {
+      "GroupId": "",
+      "professorName": "prof 2",
+      "professorAge": "30",
+      "id": 18
+    }
+  ],
+  "groups": [
+    {
+      "GroupId": "11",
+      "groupName": "IA1.1",
+      "studentCapacity": "2",
+      "professorCapacity": "3",
+      "id": 1
+    }
+  ]
+}
