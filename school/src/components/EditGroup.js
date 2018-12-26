@@ -12,7 +12,11 @@ class EditGroup extends Component {
       professorsAffAndNot: [],
       studentsAffAndNot: [],
       objConcatSt: [],
-      objConcatProf: []
+      objConcatProf: [],
+      indexStudentsToAdd: [],
+      indexStudentsToRemove: [],
+      indexProfsToAdd: [],
+      indexProfsToRemove: []
     };
 
     var groupIdPassed = this.props.groupidToPass;
@@ -79,100 +83,81 @@ class EditGroup extends Component {
       });
   }
 
-  toggleChangeProfessor(index: number) {
+  toggleChangeProfessor(index) {
+    // current array of options
+    const indexProfsToAdd = this.state.indexProfsToAdd;
+    const indexProfsToRemove = this.state.indexProfsToRemove;
+
     let objToUpdate = this.state.professorsAffAndNot[index];
-    if (objToUpdate.GroupId === this.state.group.GroupId) {
-      objToUpdate.GroupId = "";
-      let GroupId = objToUpdate.GroupId;
-      let professorName = objToUpdate.professorName;
-      let professorAge = objToUpdate.professorAge;
 
-      fetch(
-        "http://localhost:8080/professors/" +
-          this.state.professorsAffAndNot[index].id,
-        {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ GroupId, professorName, professorAge })
-        }
-      )
-        .then(response => response.json())
-
-        .then(data => {
-          this.updateGroup();
-          this.updateProfessors();
-          this.updateProfessorsDataAffAndNot();
-        });
+    // check if the check box is checked or unchecked
+    if (objToUpdate.GroupId === "") {
+      indexProfsToAdd.push(index);
     } else {
-      let GroupId = this.state.group.GroupId;
-
-      let professorName = objToUpdate.professorName;
-      let professorAge = objToUpdate.professorAge;
-
-      fetch("http://localhost:8080/professors/" + objToUpdate.id, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ professorName, professorAge, GroupId })
-      }).then(data => {
-        this.updateGroup();
-        this.updateProfessors();
-        this.updateProfessorsDataAffAndNot();
-      });
+      indexProfsToRemove.push(index);
     }
+
+    let checkboxes = document.querySelectorAll(
+      '.checkboxprofs input[type="checkbox"]'
+    );
+    var checkboxesChecked = 0;
+    var checkboxesUnchecked = 0;
+    checkboxes.forEach(element => {
+      if (element.checked) {
+        checkboxesChecked++;
+      } else {
+        checkboxesUnchecked++;
+      }
+    });
+    var profCap = parseInt(this.refs.professorCapacity.value);
+    checkboxes.forEach(element => {
+      if (checkboxesChecked === profCap && !element.checked) {
+        element.disabled = true;
+      } else {
+        element.disabled = false;
+      }
+    });
+
+    // update the state with the new array of options
+    this.setState({ indexProfsToAdd: indexProfsToAdd });
+    this.setState({ indexProfsToRemove: indexProfsToRemove });
   }
-
   toggleChangeStudent(index: number) {
+    // current array of options
+    const indexStudentsToAdd = this.state.indexStudentsToAdd;
+    const indexStudentsToRemove = this.state.indexStudentsToRemove;
     let objToUpdate = this.state.studentsAffAndNot[index];
-    if (objToUpdate.GroupId === this.state.group.GroupId) {
-      objToUpdate.GroupId = "";
-      let GroupId = objToUpdate.GroupId;
-      let studentName = objToUpdate.studentName;
-      let studentAge = objToUpdate.studentAge;
 
-      fetch(
-        "http://localhost:8080/students/" +
-          this.state.studentsAffAndNot[index].id,
-        {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ GroupId, studentName, studentAge })
-        }
-      )
-        .then(response => response.json())
-
-        .then(data => {
-          this.updateGroup();
-          this.updateStudentsAff();
-          this.updateStudentsDataAffAndNot();
-          console.log("Aff and Not : " + this.state.studentsAffAndNot);
-        });
+    // check if the check box is checked or unchecked
+    if (objToUpdate.GroupId === "") {
+      indexStudentsToAdd.push(index);
     } else {
-      let GroupId = this.state.group.GroupId;
-      let studentName = objToUpdate.studentName;
-      let studentAge = objToUpdate.studentAge;
-      fetch("http://localhost:8080/students/" + objToUpdate.id, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ studentName, studentAge, GroupId })
-      }).then(data => {
-        this.updateGroup();
-        this.updateStudentsAff();
-        this.updateStudentsDataAffAndNot();
-        console.log("Students Aff and Not : " + this.state.studentsAffAndNot);
-      });
+      indexStudentsToRemove.push(index);
     }
+
+    let checkboxes = document.querySelectorAll(
+      '.checkboxst input[type="checkbox"]'
+    );
+    var checkboxesChecked = 0;
+    var checkboxesUnchecked = 0;
+    checkboxes.forEach(element => {
+      if (element.checked) {
+        checkboxesChecked++;
+      } else {
+        checkboxesUnchecked++;
+      }
+    });
+    var stCap = parseInt(this.refs.studentCapacity.value);
+    checkboxes.forEach(element => {
+      if (checkboxesChecked === stCap && !element.checked) {
+        element.disabled = true;
+      } else {
+        element.disabled = false;
+      }
+    });
+    // update the state with the new array of options
+    this.setState({ indexStudentsToAdd: indexStudentsToAdd });
+    this.setState({ indexStudentsToRemove: indexStudentsToRemove });
   }
 
   renderStudentsAndProfessorsToEdit(
@@ -192,18 +177,18 @@ class EditGroup extends Component {
       disabledOrEnabled = (
         <div>
           {studentsAffAndNot.map((value, index) => (
-            <div className="checkbox">
+            <div className="checkboxst">
               <h4>
-              <label key={index}>
-                <input
-                  type="checkbox"
-                  ref="studentName"
-                  defaultChecked={value.GroupId === this.state.group.GroupId}
-                  disabled={value.GroupId != this.state.group.GroupId}
-                  onClick={event => this.toggleChangeStudent(index)}
-                />
-                {value.studentName}
-              </label>
+                <label key={index}>
+                  <input
+                    type="checkbox"
+                    ref="studentName"
+                    defaultChecked={value.GroupId === this.state.group.GroupId}
+                    disabled={value.GroupId != this.state.group.GroupId}
+                    onClick={event => this.toggleChangeStudent(index)}
+                  />
+                  {value.studentName}
+                </label>
               </h4>
             </div>
           ))}
@@ -213,17 +198,17 @@ class EditGroup extends Component {
       disabledOrEnabled = (
         <div>
           {studentsAffAndNot.map((value, index) => (
-            <div className="checkbox">
+            <div className="checkboxst">
               <h4>
-              <label key={index}>
-                <input
-                  type="checkbox"
-                  ref="studentName"
-                  defaultChecked={value.GroupId === this.state.group.GroupId}
-                  onClick={event => this.toggleChangeStudent(index)}
-                />
-                {value.studentName}
-              </label>
+                <label key={index}>
+                  <input
+                    type="checkbox"
+                    ref="studentName"
+                    defaultChecked={value.GroupId === this.state.group.GroupId}
+                    onClick={event => this.toggleChangeStudent(index)}
+                  />
+                  {value.studentName}
+                </label>
               </h4>
             </div>
           ))}
@@ -235,7 +220,7 @@ class EditGroup extends Component {
       disabledOrEnabledProf = (
         <div>
           {professorsAffAndNot.map((value, index) => (
-            <div className="checkbox">
+            <div className="checkboxprofs">
               <h4>
                 <label>
                   <input
@@ -257,7 +242,7 @@ class EditGroup extends Component {
       disabledOrEnabledProf = (
         <div>
           {professorsAffAndNot.map((value, index) => (
-            <div className="checkbox">
+            <div className="checkboxprofs">
               <h4>
                 <label>
                   <input
@@ -286,8 +271,7 @@ class EditGroup extends Component {
     );
   }
 
-  SubmitEdit(event) {
-    event.preventDefault();
+  SubmitEdit(professorsAffAndNot: Professor[]) {
     let id = this.state.group.id;
 
     let GroupId = this.refs.GroupId.value;
@@ -311,94 +295,109 @@ class EditGroup extends Component {
       this.props.renderDetailsGroup();
       this.props.updateDataFirstGroup();
     });
+    //students
+    this.state.indexStudentsToAdd.forEach(index => {
+      let objToUpdate = this.state.studentsAffAndNot[index];
+
+      let GroupId = this.state.group.GroupId;
+      let studentName = objToUpdate.studentName;
+      let studentAge = objToUpdate.studentAge;
+
+      fetch("http://localhost:8080/students/" + objToUpdate.id, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ GroupId, studentName, studentAge })
+      })
+        .then(response => response.json())
+
+        .then(data => {
+          this.updateGroup();
+          this.updateStudentsAff();
+          this.updateStudentsDataAffAndNot();
+        });
+    });
+    this.state.indexStudentsToRemove.forEach(index => {
+      let objToUpdate = this.state.studentsAffAndNot[index];
+      let GroupId = "";
+
+      let studentName = objToUpdate.studentName;
+      let studentAge = objToUpdate.studentAge;
+
+      fetch("http://localhost:8080/students/" + objToUpdate.id, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ studentName, studentAge, GroupId })
+      }).then(data => {
+        this.updateGroup();
+        this.updateStudentsAff();
+        this.updateStudentsDataAffAndNot();
+      });
+    });
+    //professors
+    this.state.indexProfsToAdd.forEach(index => {
+      let objToUpdate = this.state.professorsAffAndNot[index];
+
+      let GroupId = this.state.group.GroupId;
+      let professorName = objToUpdate.professorName;
+      let professorAge = objToUpdate.professorAge;
+
+      fetch("http://localhost:8080/professors/" + objToUpdate.id, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ GroupId, professorName, professorAge })
+      })
+        .then(response => response.json())
+
+        .then(data => {
+          this.updateGroup();
+          this.updateProfessors();
+          this.updateProfessorsDataAffAndNot();
+        });
+    });
+
+    this.state.indexProfsToRemove.forEach(index => {
+      let objToUpdate = this.state.professorsAffAndNot[index];
+      let GroupId = "";
+
+      let professorName = objToUpdate.professorName;
+      let professorAge = objToUpdate.professorAge;
+
+      fetch("http://localhost:8080/professors/" + objToUpdate.id, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ professorName, professorAge, GroupId })
+      }).then(data => {
+        this.updateGroup();
+        this.updateProfessors();
+        this.updateProfessorsDataAffAndNot();
+      });
+    });
 
     this.setState({ show: true });
     this.props.onClickEdit();
   }
 
   renderEditForm() {
-    let professorsAff = this.state.professorsAff;
-    let lengthOfProfsAff = professorsAff.length;
-    let professorCapacityElement;
-    if (lengthOfProfsAff.toString() === this.state.group.professorCapacity) {
-      professorCapacityElement = (
-        <div className="form-group row">
-          <label className="control-label col-md-12"><h4>Professor Capacity</h4></label>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              type="text"
-              ref="professorCapacity"
-              placeholder="Professor Capacity"
-              disabled
-              defaultValue={this.state.group.professorCapacity}
-              required
-            />
-          </div>
-        </div>
-      );
-    } else {
-      professorCapacityElement = (
-        <div className="form-group row">
-          <label className="control-label col-md-12"><h4>Professor Capacity</h4></label>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              type="text"
-              ref="professorCapacity"
-              placeholder="Professor Capacity"
-              defaultValue={this.state.group.professorCapacity}
-              required
-            />
-          </div>
-        </div>
-      );
-    }
-
-    let studentsAff = this.state.studentsAff;
-    let lengthOfStudentsAff = studentsAff.length;
-    let studentCapacityElement;
-    if (lengthOfStudentsAff.toString() === this.state.group.studentCapacity) {
-      studentCapacityElement = (
-        <div className="form-group row">
-          <label className="control-label col-md-12"><h4>Student Capacity</h4></label>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              type="text"
-              ref="studentCapacity"
-              disabled
-              placeholder="Student Capacity"
-              defaultValue={this.state.group.studentCapacity}
-              required
-            />
-          </div>
-        </div>
-      );
-    } else {
-      studentCapacityElement = (
-        <div className="form-group row">
-          <label className="control-label col-md-12"><h4>Student Capacity</h4></label>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              type="text"
-              ref="studentCapacity"
-              placeholder="Student Capacity"
-              defaultValue={this.state.group.studentCapacity}
-              required
-            />
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div>
         <h3>Edit Group</h3>
         <form ref="myForm" className="myForm" onSubmit={this.SubmitEdit}>
           <div className="form-group row">
-            <label className=" control-label col-md-12"><h4>Group Number</h4></label>
+            <label className=" control-label col-md-12">
+              <h4>Group Number</h4>
+            </label>
             <div className="col-md-4">
               <input
                 className="form-control"
@@ -411,7 +410,9 @@ class EditGroup extends Component {
             </div>
           </div>
           <div className="form-group row">
-            <label className=" control-label col-md-12"><h4>Group Name</h4></label>
+            <label className=" control-label col-md-12">
+              <h4>Group Name</h4>
+            </label>
             <div className="col-md-4">
               <input
                 className="form-control"
@@ -423,9 +424,36 @@ class EditGroup extends Component {
               />
             </div>
           </div>
-          {studentCapacityElement}
-          {professorCapacityElement}
-
+          <div className="form-group row">
+            <label className="control-label col-md-12">
+              <h4>Student Capacity</h4>
+            </label>
+            <div className="col-md-4">
+              <input
+                className="form-control"
+                type="text"
+                ref="studentCapacity"
+                placeholder="Student Capacity"
+                defaultValue={this.state.group.studentCapacity}
+                required
+              />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label className="control-label col-md-12">
+              <h4>Professor Capacity</h4>
+            </label>
+            <div className="col-md-4">
+              <input
+                className="form-control"
+                type="text"
+                ref="professorCapacity"
+                placeholder="Professor Capacity"
+                defaultValue={this.state.group.professorCapacity}
+                required
+              />
+            </div>
+          </div>
           <div className="form-group">
             <ButtonToolbar>
               <Button bsStyle="primary" type="submit">

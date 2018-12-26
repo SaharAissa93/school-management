@@ -1,78 +1,60 @@
 {
   "students": [
     {
-      "studentName": "Mariem",
-      "studentAge": "21",
       "GroupId": "11",
-      "id": 6
-    },
-    {
-      "studentName": "St 1",
+      "studentName": "st1",
       "studentAge": "21",
-      "GroupId": "11",
-      "id": 7
+      "id": 1
     },
     {
-      "GroupId": "",
-      "studentName": "St 2",
+      "studentName": "st2",
       "studentAge": "22",
-      "id": 8
+      "GroupId": "",
+      "id": 2
     },
     {
-      "GroupId": "",
-      "studentName": "St 3",
+      "studentName": "st3",
       "studentAge": "21",
-      "id": 9
+      "GroupId": "",
+      "id": 3
     },
     {
       "GroupId": "",
-      "studentName": "St 4",
-      "studentAge": "22",
-      "id": 10
-    },
-    {
-      "GroupId": "",
-      "studentName": "x",
-      "studentAge": "20",
-      "id": 11
+      "studentName": "st4",
+      "studentAge": "21",
+      "id": 4
     }
   ],
   "professors": [
     {
-      "GroupId": "",
-      "professorName": "Naoufel",
-      "professorAge": "41",
-      "id": 10
-    },
-    {
-      "GroupId": "",
-      "professorName": "Abd Rahmen\t",
-      "professorAge": "35",
-      "id": 12
-    },
-    {
-      "GroupId": "",
-      "professorName": "Mohamed Ali",
-      "professorAge": "32",
-      "id": 13
-    },
-    {
-      "GroupId": "",
-      "professorName": "Awfa",
-      "professorAge": "30",
-      "id": 16
-    },
-    {
-      "GroupId": "",
-      "professorName": "Prof 1",
+      "GroupId": "11",
+      "professorName": "prof1",
       "professorAge": "29",
-      "id": 17
+      "id": 1
+    },
+    {
+      "GroupId": "11",
+      "professorName": "prof2",
+      "professorAge": "30",
+      "id": 2
+    },
+    {
+      "GroupId": "11",
+      "professorName": "prof3",
+      "professorAge": "50",
+      "id": 3
     },
     {
       "GroupId": "",
-      "professorName": "prof 2",
+      "professorName": "prof4",
+      "professorAge": "35",
+      "id": 4
+    },
+    {
+      "GroupId": "",
+      "professorName": "prof5",
       "professorAge": "30",
-      "id": 18
+      "id": 5
     }
   ],
   "groups": [
